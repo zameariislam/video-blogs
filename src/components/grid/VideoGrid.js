@@ -7,17 +7,18 @@ import VideoGridItem from './VideoGridItem';
 
 const VideoGrid = () => {
     const { videos, isLoading, isError, error } = useSelector(state => state.videos)
+    const { tags,search } = useSelector(state => state.filter)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchVideos())
+        dispatch(fetchVideos({ tags,search}))
 
-    }, [dispatch])
+    }, [dispatch,tags,search])
     // decide how to render 
     let content = null
     if (isLoading) content = <Loading/>
     if (!isLoading && isError) content = <div class="col-span-12">{error}</div>  
-    if (!isLoading && !isError && videos?.length === 0) content = <p>No Transaction Found</p>
+    if (!isLoading && !isError && videos?.length === 0) content = <p>No blogs Found</p>
     if (!isLoading && !isError && videos?.length > 0) {
         content = videos.map(video => <VideoGridItem key={video.id} video={video} />)
     }
